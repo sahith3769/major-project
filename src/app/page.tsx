@@ -169,6 +169,15 @@ export default function Home() {
                         </div>
                         <Progress value={state.prediction.confidence * 100} className="w-full h-3" />
                       </div>
+                      {state.prediction.details && (
+                        <Alert className="text-left mt-4" variant="default">
+                          <Info className="h-4 w-4" />
+                          <AlertTitle>Model Reasoning</AlertTitle>
+                          <AlertDescription>
+                            {state.prediction.details}
+                          </AlertDescription>
+                        </Alert>
+                      )}
                     </div>
                   )}
                   {!isPending && !state.prediction && (

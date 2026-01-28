@@ -46,10 +46,10 @@ export async function getPrediction(prevState: PredictionState, formData: FormDa
     };
   } catch (e) {
     console.error(e);
-    const errorMessage = e instanceof Error ? e.message : 'An unexpected error occurred during prediction.';
+    const errorMessage = e instanceof Error ? e.message : 'An unexpected error occurred.';
     return {
       prediction: null,
-      error: `Prediction failed. This may be due to a network issue or an invalid image. Please try again.`,
+      error: `Prediction failed: ${errorMessage}`,
       timestamp: Date.now(),
     };
   }

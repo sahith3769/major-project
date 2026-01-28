@@ -15,15 +15,16 @@ const PredictDiseaseFromImageInputSchema = z.object({
   photoDataUri: z
     .string()
     .describe(
-      'A photo of a skin condition, as a data URI that must include a MIME type and use Base64 encoding. Expected format: \'data:<mimetype>;base64,<encoded_data>\'.' // Corrected the expected format
+      "A photo of a skin condition, as a data URI that must include a MIME type and use Base64 encoding. Expected format: 'data:<mimetype>;base64,<encoded_data>'."
     ),
   modelType: z.enum(['CNN', 'VGG16', 'ResNet50']).describe('The type of deep learning model to use for prediction.'),
 });
 export type PredictDiseaseFromImageInput = z.infer<typeof PredictDiseaseFromImageInputSchema>;
 
 const PredictDiseaseFromImageOutputSchema = z.object({
-  predictedDisease: z.string().describe('The predicted skin disease.'),
+  predictedDisease: z.string().describe('The predicted skin disease. Common examples include "Eczema", "Psoriasis", "Acne", "Rosacea", "Melanoma", "Benign Keratosis", "Actinic Keratosis".'),
   confidence: z.number().describe('The confidence level of the prediction (0-1).'),
+  details: z.string().describe('A brief, one-sentence explanation of the reasoning behind the prediction based on the model type.'),
 });
 export type PredictDiseaseFromImageOutput = z.infer<typeof PredictDiseaseFromImageOutputSchema>;
 
@@ -35,15 +36,22 @@ const prompt = ai.definePrompt({
   name: 'predictDiseaseFromImagePrompt',
   input: {schema: PredictDiseaseFromImageInputSchema},
   output: {schema: PredictDiseaseFromImageOutputSchema},
-  prompt: `You are an AI that analyzes images of skin conditions and predicts the most likely disease.
+  prompt: `You are an AI dermatology assistant that analyzes images of skin conditions to simulate a prediction from a deep learning model.
+  Your task is to identify a potential skin condition from the provided image and return a structured JSON output.
 
-  Analyze the provided image and provide the predicted disease and a confidence level (0-1).
+  Analyze the provided image using the simulated characteristics of the selected model:
+  - If modelType is 'CNN': Provide a balanced prediction considering basic features like color and shape.
+  - If modelType is 'VGG16': Focus on texture and intricate patterns. The confidence might be slightly lower due to its sensitivity.
+  - If modelType is 'ResNet50': Act as a very deep model. Consider complex and subtle features. Provide a higher confidence score and a more decisive-sounding detail.
 
-  Use the {{modelType}} model to make the prediction.
+  Based on your analysis, provide:
+  1.  'predictedDisease': The most likely skin condition.
+  2.  'confidence': A confidence score between 0.0 and 1.0. This should vary based on the modelType.
+  3.  'details': A brief, one-sentence explanation for the diagnosis, tailored to the simulated model's focus.
 
   Image: {{media url=photoDataUri}}
 
-  Ensure that the predictedDisease and confidence values are accurate and well-formatted.
+  IMPORTANT: Your response MUST be valid JSON that adheres to the output schema. Do not include any explanatory text outside of the JSON structure.
   `,
 });
 

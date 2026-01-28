@@ -1,7 +1,6 @@
 'use client';
 
-import { useState, useTransition, type ChangeEvent, useEffect } from 'react';
-import { useFormState } from 'react-dom';
+import { useState, useTransition, type ChangeEvent, useEffect, useActionState } from 'react';
 import Image from 'next/image';
 import { UploadCloud, Microscope, BrainCircuit, AlertTriangle, Info } from 'lucide-react';
 
@@ -44,7 +43,7 @@ function SubmitButton({ disabled, isPending }: { disabled: boolean; isPending: b
 }
 
 export default function Home() {
-  const [state, formAction] = useFormState(getPrediction, initialState);
+  const [state, formAction] = useActionState(getPrediction, initialState);
   const [isPending, startTransition] = useTransition();
   const [imagePreview, setImagePreview] = useState<string | null>(null);
   const [photoDataUri, setPhotoDataUri] = useState<string>('');

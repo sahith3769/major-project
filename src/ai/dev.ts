@@ -1,1 +1,5 @@
-// Flows will be imported for their side effects in this file.
+import { config } from 'dotenv';
+config();
+
+import '@/ai/flows/image-preprocessing.ts';
+import '@/ai/flows/predict-disease-from-image.ts';

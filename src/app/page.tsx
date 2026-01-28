@@ -158,26 +158,36 @@ export default function Home() {
                     </div>
                   )}
                   {!isPending && state.prediction && (
-                    <div className="w-full space-y-4 text-center">
-                      <p className="text-muted-foreground font-medium">Predicted Condition:</p>
-                      <h3 className="text-4xl font-bold text-primary animate-fade-in">{state.prediction.predictedDisease}</h3>
-                      <div className="space-y-2 pt-4">
-                        <div className="flex justify-between items-center text-sm font-medium">
-                          <span className="text-muted-foreground">Confidence Score</span>
-                          <span className="text-primary font-bold">{(state.prediction.confidence * 100).toFixed(1)}%</span>
+                    <>
+                      {state.prediction.predictedDisease === 'Inappropriate image' ? (
+                        <div className="flex flex-col items-center text-center text-destructive p-8">
+                          <AlertTriangle className="w-12 h-12 mb-4" />
+                          <p className="font-bold text-lg">{state.prediction.predictedDisease}</p>
+                          <p className="text-sm">{state.prediction.details}</p>
                         </div>
-                        <Progress value={state.prediction.confidence * 100} className="w-full h-3" />
-                      </div>
-                      {state.prediction.details && (
-                        <Alert className="text-left mt-4" variant="default">
-                          <Info className="h-4 w-4" />
-                          <AlertTitle>Model Reasoning</AlertTitle>
-                          <AlertDescription>
-                            {state.prediction.details}
-                          </AlertDescription>
-                        </Alert>
+                      ) : (
+                        <div className="w-full space-y-4 text-center">
+                          <p className="text-muted-foreground font-medium">Predicted Condition:</p>
+                          <h3 className="text-4xl font-bold text-primary animate-fade-in">{state.prediction.predictedDisease}</h3>
+                          <div className="space-y-2 pt-4">
+                            <div className="flex justify-between items-center text-sm font-medium">
+                              <span className="text-muted-foreground">Confidence Score</span>
+                              <span className="text-primary font-bold">{(state.prediction.confidence * 100).toFixed(1)}%</span>
+                            </div>
+                            <Progress value={state.prediction.confidence * 100} className="w-full h-3" />
+                          </div>
+                          {state.prediction.details && (
+                            <Alert className="text-left mt-4" variant="default">
+                              <Info className="h-4 w-4" />
+                              <AlertTitle>Model Reasoning</AlertTitle>
+                              <AlertDescription>
+                                {state.prediction.details}
+                              </AlertDescription>
+                            </Alert>
+                          )}
+                        </div>
                       )}
-                    </div>
+                    </>
                   )}
                   {!isPending && !state.prediction && (
                      <div className="flex flex-col items-center text-center text-muted-foreground p-8">
